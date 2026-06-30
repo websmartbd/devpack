@@ -21,51 +21,50 @@
 
 ## 🌟 What is DevPack?
 
-DevPack একটি **self-hosted PHP hosting control panel** যা দিয়ে আপনি সহজেই:
+DevPack is a **self-hosted PHP hosting control panel** that allows you to easily:
 
-- ✅ Custom **subdomain** তৈরি ও manage করতে পারবেন
-- ✅ **MySQL database** provision করতে পারবেন এক ক্লিকে
-- ✅ Browser থেকেই **file manager** দিয়ে code upload ও edit করতে পারবেন
-- ✅ Live **dashboard** দিয়ে সব site monitor করতে পারবেন
-- ✅ **Shared hosting (cPanel)**, **VPS**, বা **Localhost** — সব জায়গায় কাজ করে
+- ✅ Create and manage custom **subdomains**
+- ✅ Provision **MySQL databases** with a single click
+- ✅ Upload and edit code directly from your browser using the **file manager**
+- ✅ Monitor all your sites via a live **dashboard**
+- ✅ Run perfectly on **Shared hosting (cPanel)**, **VPS**, or **Localhost**
 
-> 💡 Technical knowledge ছাড়াই নিজের server-এ PHP site deploy করার সবচেয়ে সহজ উপায়।
+> 💡 The easiest way to deploy PHP sites on your own server without needing deep technical knowledge.
 
 ---
 
 ## 🚀 Features
 
 ### 🌐 Subdomain Management
-- একটি form fill করেই নতুন subdomain তৈরি করুন
-- প্রতিটি subdomain আলাদা isolated directory-তে থাকে
-- যেকোনো সময় subdomain delete করা যায়
+- Create a new subdomain simply by filling out a form
+- Each subdomain resides in its own isolated directory
+- Delete subdomains anytime with one click
 
 ### 🗄️ MySQL Database
-- Subdomain-এর জন্য dedicated database তৈরি করুন
-- Database username ও password auto-generate হয়
-- Credentials সুরক্ষিতভাবে `data/` folder-এ store হয়
-- cPanel API, VPS direct MySQL — উভয় সমর্থিত
+- Provision dedicated databases for your subdomains
+- Auto-generated database usernames and passwords
+- Credentials securely stored in the `data/` folder
+- Supports both cPanel API and VPS direct MySQL connections
 
 ### 📁 File Manager
-- **Upload** — drag & drop file upload
-- **Edit** — browser-based code editor
-- **Rename / Move / Delete** — সব ফাইল operation
-- **Create folder** — directory structure manage করুন
-- **Download** — যেকোনো ফাইল download করুন
+- **Upload** — Drag & drop file uploading
+- **Edit** — Built-in browser-based code editor
+- **Manage** — Rename, Move, Delete, and create directories
+- **Download** — Download any file instantly
 
 ### 📊 Live Dashboard
 - Total subdomains count
 - Total files deployed
-- Storage used (KB/MB/GB auto format)
-- Per-site file listing
+- Storage used (Auto-formats to KB/MB/GB)
+- Per-site file and folder listing
 
 ### 🛡️ Security
-- CSRF protection সব forms-এ
-- Rate limiting (login attempts)
+- CSRF protection across all forms
+- Rate limiting for login attempts
 - Session hardening (httpOnly, SameSite, Secure)
 - Security headers (HSTS, CSP, X-Frame-Options, etc.)
-- Dangerous PHP functions disabled
-- `.htaccess` দিয়ে sensitive directories protected
+- Dangerous PHP functions automatically disabled
+- Sensitive directories protected via `.htaccess`
 
 ### ⚡ Server Support
 | Type | Description |
@@ -83,7 +82,7 @@ DevPack একটি **self-hosted PHP hosting control panel** যা দিয�
 - PHP **8.0+**
 - Apache with **mod_rewrite** enabled
 - MySQL / MariaDB **5.7+**
-- `AllowOverride All` in Apache config
+- `AllowOverride All` enabled in your Apache configuration
 
 ### Step 1 — Clone the repository
 
@@ -94,32 +93,31 @@ cd devpack
 
 ### Step 2 — Configure
 
-`config/config.php` ফাইলটি edit করুন:
+Edit the `config/config.php` file with your details:
 
 ```php
 // MySQL connection
 define('DB_HOST', 'localhost');
-define('DB_USER', 'your_db_user');
-define('DB_PASS', 'your_db_password');
-define('DB_PORT', 3306);
+define('DB_USER', 'root');
+define('DB_PASS', '');
 
-// Panel login password
-define('PANEL_PASS', 'your_strong_password');
+// Panel login
+define('PANEL_PASS', 'your_secure_password_here');
 
-// Your domain
-define('MAIN_DOMAIN', 'yourdomain.com');
-
-// Server type: 'local', 'cpanel', or 'vps'
-define('SERVER_TYPE', 'local');
+// Hosting details
+define('SERVER_TYPE', 'local'); // 'local', 'cpanel', or 'vps'
+define('MAIN_DOMAIN', 'localhost'); // Your main domain name
 ```
 
-### Step 3 — Set permissions
+### Step 3 — Secure Directory Permissions
+
+Ensure that the `data/` and `sites/` directories are writable by the web server:
 
 ```bash
-chmod 755 sites/
-chmod 755 data/
-chmod 644 config/config.php
+chmod -R 775 data sites
+chown -R www-data:www-data data sites
 ```
+*(On cPanel/Shared hosting, standard 755 permissions usually work fine).*
 
 ### Step 4 — Apache Virtual Host
 
@@ -139,13 +137,13 @@ chmod 644 config/config.php
 
 ### Step 5 — Done! 🎉
 
-Browser-এ `http://yourdomain.com` open করুন এবং Control Panel-এ login করুন।
+Open `http://yourdomain.com` in your browser and log into the Control Panel!
 
 ---
 
 ## ⚙️ Configuration
 
-### `config/config.php` — সব settings এখানে
+### `config/config.php` — Core Settings
 
 | Constant | Description | Default |
 |----------|-------------|---------|
@@ -187,33 +185,33 @@ define('MAIN_DOMAIN', 'yourdomain.com');
 
 ### Control Panel
 
-1. `https://yourdomain.com/control-panel.php` এ যান
-2. Password দিয়ে login করুন
-3. Dashboard থেকে সব manage করুন
+1. Visit `https://yourdomain.com/` (or wherever DevPack is hosted)
+2. Log in using your `PANEL_PASS`
+3. Manage everything directly from the Dashboard
 
-### নতুন Site Deploy করার ধাপ
+### Steps to Deploy a New Site
 
-```
-1. "Create Subdomain" → subdomain name দিন (e.g., myapp)
-   → myapp.yourdomain.com তৈরি হবে
+```text
+1. Click "Create Subdomain" → Enter subdomain name (e.g., myapp)
+   → myapp.yourdomain.com is instantly created!
 
-2. "File Manager" → files upload করুন বা সরাসরি edit করুন
+2. Go to "File Manager" → Upload or edit your code directly in the browser.
 
-3. (Optional) "Create Database" → MySQL DB provision করুন
-   → Credentials auto-save হবে
+3. (Optional) Click "Create Database" → Provision a MySQL DB.
+   → Credentials will automatically be saved and displayed.
 
-4. Done! myapp.yourdomain.com এ site live!
+4. Done! myapp.yourdomain.com is now live!
 ```
 
 ### File Structure
 
-```
+```text
 devpack/
-├── index.php              # Landing page + main router
+├── index.html             # Landing page (static HTML)
+├── index.php              # Login page + Main router
 ├── control-panel.php      # Admin dashboard
-├── login.php              # Authentication
-├── file-manager.php       # File manager
-├── sqldb.php              # Database manager
+├── file-manager.php       # File manager functionality
+├── sqldb.php              # Database manager functionality
 ├── .htaccess              # Apache rules & security
 │
 ├── config/
@@ -236,70 +234,68 @@ devpack/
 
 ## 🔒 Security
 
-DevPack নিরাপত্তার বিষয়ে গুরুত্বের সাথে কাজ করে:
+DevPack takes security seriously:
 
 | Feature | Details |
 |---------|---------|
-| **CSRF Protection** | সব POST forms-এ token validation |
-| **Rate Limiting** | 5 attempts per 5 minutes (configurable) |
+| **CSRF Protection** | Token validation on all POST requests |
+| **Rate Limiting** | 5 login attempts per 5 minutes (configurable) |
 | **Session Security** | httpOnly, SameSite=Strict, Secure cookies |
-| **HSTS** | Production-এ HTTPS enforce (31536000s) |
+| **HSTS** | Enforces HTTPS in production (31536000s) |
 | **CSP** | Strict Content-Security-Policy headers |
-| **X-Frame-Options** | Clickjacking protection |
-| **Directory Protection** | `data/` ও `config/` web-inaccessible |
-| **PHP Hardening** | `exec`, `shell_exec` etc. disabled |
+| **X-Frame-Options** | Protects against Clickjacking |
+| **Directory Protection** | `data/` and `config/` are blocked via `.htaccess` |
+| **PHP Hardening** | Dangerous functions like `exec`, `shell_exec` are disabled |
 
-> ⚠️ **Important:** Production-এ `PANEL_PASS` অবশ্যই strong password দিন এবং `config/config.php` file permission `644` রাখুন।
+> ⚠️ **Important:** In production, ensure `PANEL_PASS` is strong and set the `config/config.php` file permissions to `644`.
 
 ---
 
 ## 🤝 Contributing
 
-DevPack একটি open-source project। আপনার contribution আমাদের কাছে অনেক গুরুত্বপূর্ণ!
+DevPack is an open-source project. Contributions are highly appreciated!
 
-### কীভাবে Contribute করবেন
+### How to Contribute
 
 ```bash
-# 1. Repo fork করুন
-# (GitHub-এ "Fork" button click করুন)
+# 1. Fork the repo on GitHub
 
-# 2. Clone করুন
+# 2. Clone your fork locally
 git clone https://github.com/YOUR_USERNAME/devpack.git
 cd devpack
 
-# 3. নতুন branch তৈরি করুন
+# 3. Create a new branch
 git checkout -b feature/your-feature-name
-# অথবা bug fix-এর জন্য:
+# Or for a bug fix:
 git checkout -b fix/issue-description
 
-# 4. Changes করুন এবং commit করুন
+# 4. Make your changes and commit
 git add .
 git commit -m "feat: add your feature description"
 
-# 5. Push করুন
+# 5. Push to your fork
 git push origin feature/your-feature-name
 
-# 6. Pull Request খুলুন
-# GitHub-এ গিয়ে "New Pull Request" করুন
+# 6. Open a Pull Request on the main repository!
 ```
 
 ### Commit Message Format
 
-```
-feat: নতুন feature যোগ করলে
-fix: bug fix করলে
-docs: documentation update
-style: code formatting (logic change নেই)
-refactor: code restructure (behavior change নেই)
-test: test যোগ বা fix
-chore: build, config update
+```text
+feat: Added a new feature
+fix: Fixed a bug
+docs: Updated documentation
+style: Code formatting (no logic changes)
+refactor: Code restructuring
+test: Added or updated tests
+chore: Build processes, configuration updates
 ```
 
 ### Contribution Ideas
 
 - [ ] Nginx support
 - [ ] PHP version selector per subdomain
-- [ ] Automatic SSL (Let's Encrypt)
+- [ ] Automatic SSL via Let's Encrypt
 - [ ] Backup & restore functionality
 - [ ] Two-factor authentication
 - [ ] Site-level analytics
@@ -310,39 +306,39 @@ chore: build, config update
 
 ### Code Guidelines
 
-- PHP 8.0+ compatible syntax ব্যবহার করুন
-- Security-sensitive functions-এ অবশ্যই input validation করুন
-- নতুন feature-এর জন্য README update করুন
-- Code-এ বাংলা/English দুটোই comment acceptable
+- Ensure compatibility with PHP 8.0+
+- Always perform input validation on security-sensitive functions
+- Update the README if adding new features
+- Both English and Bengali comments are acceptable in the codebase
 
 ---
 
 ## 🐛 Bug Report
 
-কোনো bug বা সমস্যা পেলে **[GitHub Issues](https://github.com/websmartbd/devpack/issues)** এ report করুন।
+If you discover a bug or run into issues, please report it via **[GitHub Issues](https://github.com/websmartbd/devpack/issues)**.
 
-### Bug Report করার আগে
+### Before Reporting a Bug
 
-1. Existing issues-এ search করুন (duplicate না হয়)
-2. Latest version use করছেন কিনা check করুন
-3. `config/config.php` settings ঠিক আছে কিনা verify করুন
+1. Search existing issues to avoid duplicates.
+2. Check if you are using the latest version.
+3. Verify your `config/config.php` settings.
 
-### Bug Report-এ কী লিখবেন
+### What to Include in Your Bug Report
 
 ```markdown
 **Bug Description:**
-[কী সমস্যা হচ্ছে তা স্পষ্টভাবে লিখুন]
+[Clearly describe what the issue is]
 
 **Steps to Reproduce:**
-1. এই কাজটি করলাম...
-2. তারপর এটা করলাম...
-3. Error/সমস্যা দেখা গেল
+1. I did this...
+2. Then I did this...
+3. The error occurred
 
 **Expected Behavior:**
-[কী হওয়া উচিত ছিল]
+[What you expected to happen]
 
 **Actual Behavior:**
-[আসলে কী হচ্ছে]
+[What actually happened]
 
 **Environment:**
 - OS: [e.g., Ubuntu 22.04]
@@ -353,7 +349,7 @@ chore: build, config update
 - Browser: [e.g., Chrome 120]
 
 **Error Log (if any):**
-[data/.error_log এর content paste করুন]
+[Paste the content of data/.error_log if applicable]
 ```
 
 **[🐛 Report a Bug](https://github.com/websmartbd/devpack/issues/new?labels=bug&template=bug_report.md)**
@@ -364,11 +360,11 @@ chore: build, config update
 
 ## 📄 License
 
-এই project [MIT License](LICENSE) এর অধীনে released।
+This project is licensed under the [MIT License](LICENSE).
 
-```
-MIT License — আপনি freely use, modify, এবং distribute করতে পারবেন।
-Attribution দিলে ভালো হয় কিন্তু required নয়।
+```text
+MIT License — You are free to use, modify, and distribute this software.
+Attribution is appreciated but not required.
 ```
 
 ---
@@ -384,8 +380,8 @@ Attribution দিলে ভালো হয় কিন্তু required ন�
 
 <div align="center">
 
-Made with ❤️ by [websmartbd](https://github.com/websmartbd)
+Made with ❤️ by [B.M Shifat](https://facebook.com/bmshifat0) & [websmartbd](https://github.com/websmartbd)
 
-⭐ **Star দিন যদি কাজে লেগে থাকে!** ⭐
+⭐ **Star the repo if you found it helpful!** ⭐
 
 </div>
